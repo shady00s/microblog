@@ -1,5 +1,4 @@
 import os
-import sqlite3 
 basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     SECRET_KEY = os.environ.get('SECERT_KEY') or 'you-will-never-guess'
