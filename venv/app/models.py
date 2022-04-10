@@ -1,4 +1,6 @@
 from datetime import datetime
+from encodings import utf_8
+from hashlib import md5
 from flask_login import LoginManager, UserMixin
 from sqlalchemy import PrimaryKeyConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,6 +14,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(64))
     posts = db.relationship('Post',backref='author',lazy='dynamic' )
+    last_seen = db.Column(db.DateTime,default = datetime.utcnow)
+    about_me = db.Column(db.String(140))
     # to create password hash
 
     def set_password(self, password):
@@ -20,6 +24,11 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+        
+    #to create avatar using email 
+    def avatar(self , size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest,size)
 
 # method used to point to objects in class
     def __repr__(self):
