@@ -97,7 +97,7 @@ def user(username):
 @app.route('/editprofile', methods=['GET', 'POST'])
 @login_required
 def editprofile():
-    form = EditProfileClass()
+    form = EditProfileClass(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
